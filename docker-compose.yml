@@ -1,0 +1,36 @@
+version: '7'
+services:
+  api:
+    build:
+      context: ./api
+    networks:
+      - internal
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: your_root_password
+      MYSQL_DATABASE: your_database_name
+      MYSQL_USER: your_mysql_user
+      MYSQL_PASSWORD: your_mysql_password
+    networks:
+      - internal
+  thread:
+    build:
+      context: ./thread
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    networks:
+      - internal
+  sender:
+    build:
+      context: ./sender
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api
+    networks:
+      - internal
+networks:
+  internal:
